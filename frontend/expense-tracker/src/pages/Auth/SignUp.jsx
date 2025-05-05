@@ -15,6 +15,14 @@ const SignUp = () => {
   const navigate = useNavigate();
   const handleSignUp = async (e) => {
     e.preventDefault();
+    if (!profilePic) {
+      setError("Please upload a profile picture.");
+        return;
+    }
+    if (!fullName) {
+        setError("Please enter your full name.");
+        return;
+    }
     if (!validateEmail(email)) {
       setError("Please enter a valid email address.");
       return;
@@ -58,8 +66,18 @@ const SignUp = () => {
             type="password"
           />
 
-          {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+           {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+                    <button type="submit" className="btn-primary">
+                      SignUp
+                    </button>
+                    <p className="text-xs text-slate-700 mt-4">
+                      Have an account?{" "}
+                      <Link className="font-medium text-primary underline" to="/login">
+                        Login here
+                      </Link>
+                    </p>
         </form>
+        
       </div>
     </AuthLayout>
   );
