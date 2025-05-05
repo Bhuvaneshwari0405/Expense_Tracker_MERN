@@ -1,0 +1,12 @@
+{
+  "name": "expense_tracker_mern",
+  "version": "1.0.0",
+  "description": "expense tracker app using mern stack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Bhuvaneshwari C, Prakashini S",
+  "license": "MIT"
+}
