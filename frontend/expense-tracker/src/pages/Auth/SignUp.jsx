@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AuthLayout from "/src/components/layouts/AuthLayout.jsx";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "/src/components/Inputs/input.jsx";
 import { validateEmail } from "/src/utils/helper.js";
 import ProfilePhotoSelector from "/src/components/Inputs/ProfilePhotoSelector.jsx";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import { UserContext } from "../../context/userContext.jsx";
+import uploadImage from "../../utils/uploadImage.js";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -11,14 +15,12 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const {updateUser} = useContext(UserContext);
 
   const navigate = useNavigate();
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!profilePic) {
-      setError("Please upload a profile picture.");
-        return;
-    }
+    let profileImageUrl = "";
     if (!fullName) {
         setError("Please enter your full name.");
         return;
@@ -33,6 +35,36 @@ const SignUp = () => {
     }
     setError("");
     //SignUp API call
+
+    try{
+
+      //upload image if present
+      if (profilePic) {
+        const imageUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imageUploadRes.imageUrl || "";
+      }
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        fullName,
+        email,
+        password,
+        profileImageUrl,
+      });
+      const { token, user } = response.data;
+      if(token) {
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+    }
+  }
+    catch (error) {
+      if (error.response && error.response.data.message) {
+        setError("User Already Exsist.");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server error. Please try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    }
   };
   return (
     <AuthLayout>

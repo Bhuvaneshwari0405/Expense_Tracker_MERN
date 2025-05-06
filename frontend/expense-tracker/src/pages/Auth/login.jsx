@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AuthLayout from "/src/components/layouts/AuthLayout.jsx";
 import { useNavigate, Link } from "react-router-dom";
 import Input from "/src/components/Inputs/input.jsx";
 import { validateEmail } from "/src/utils/helper.js";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import { UserContext } from "../../context/userContext.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const {updateUser} = useContext(UserContext);
+
   const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,6 +28,27 @@ const Login = () => {
     setError("");
 
     //Login API call
+    try{
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
+      const { token, user } = response.data;
+      if(token) {
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      }
+    }
+    catch (error) {
+      if (error.response && error.response.data.message) {
+        setError("Invalid email or password.");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server error. Please try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   return (
