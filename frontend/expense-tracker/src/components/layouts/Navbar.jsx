@@ -6,27 +6,26 @@ import SideMenu from "./SideMenu";
 const Navbar = ({ activeMenu }) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
   return (
-    <div className="flex gap-5 items-center justify-between bg-white p-5 shadow-md">
-      <button
-        className="block lg:hidden text-black"
-        onClick={() => setOpenSideMenu(!openSideMenu)}
-      >
-        {openSideMenu ? (
-          <HiOutlineX className="text-2xl text-black" />
-        ) : (
-          <HiOutlineMenu className="text-2xl" />
-        )}
-      </button>
-      <h2 className="text-lg font-medium text-black">Expense Tracker</h2>
-      {openSideMenu && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-10 flex justify-center items-center">
-          <div className="bg-white w-1/2 h-full p-5 rounded-lg shadow-lg">
-            <SideMenu activeMenu={activeMenu} />
-            <button onClick={() => setOpenSideMenu(false)}>Close</button>
-          </div>
-        </div>
-      )}
+    <div className="w-full fixed top-0 left-0 z-[350] flex items-center gap-7 bg-white border-b border-gray-200/50 backdrop-blur-[2px] py-4 px-7">
+  <button
+    className="block lg:hidden text-black"
+    onClick={() => setOpenSideMenu(!openSideMenu)}
+  >
+    {openSideMenu ? (
+      <HiOutlineX className="text-2xl" />
+    ) : (
+      <HiOutlineMenu className="text-2xl" />
+    )}
+  </button>
+  <h2 className="text-lg font-medium text-black">Expense Tracker</h2>
+
+  {openSideMenu && (
+    <div className="fixed top-[61px] left-0 z-[300] h-[calc(100vh-61px)] w-64 bg-white shadow-lg overflow-y-auto">
+      <SideMenu activeMenu={activeMenu} />
     </div>
+  )}
+</div>
+
   );
 };
 export default Navbar;

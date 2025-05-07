@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SIDE_MENU_DATA } from "../../utils/data.js";
-import { useContext } from "react";
 import { UserContext } from "../../context/userContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 const SideMenu = ({ activeMenu }) => {
   const { user, clearUser } = useContext(UserContext);
-
   const navigate = useNavigate();
+
   const handleClick = (route) => {
     if (route === "logout") {
       handleLogout();
@@ -15,6 +14,7 @@ const SideMenu = ({ activeMenu }) => {
     }
     navigate(route);
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     clearUser();
@@ -22,37 +22,32 @@ const SideMenu = ({ activeMenu }) => {
   };
 
   return (
-    <div className="w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 p-5 sticky top-[61px] z-10">
-      <div className="flex flex-col gap-2">
-        {user?.profileImageUrl ? (
+    <div className="w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 p-5 sticky top-[61px] z-20">
+      <div className="flex flex-col items-center justify-center gap-3 mt-3 mb-7">
+        {user?.profileImageUrl && (
           <img
-            src={user?.profileImageUrl}
+            src={user.profileImageUrl}
             alt="Profile"
-            className="w-10 h-10 rounded-full"
+            className="w-20 h-20 bg-slate-200 rounded-full"
           />
-        ) : (
-          <div className="w-10 h-10 rounded-full bg-gray-200"></div>
         )}
-        {SIDE_MENU_DATA.map((item, index) => (
-          <button
-            key={`menu_${index}`}
-            className={`flex items-center gap-2 p-2 rounded-md cursor-pointer ${
-              activeMenu === item.label ? "bg-gray-200" : ""
-            }`}
-            onClick={() => handleClick(item.path)}
-          >
-            <item.icon className="" />
-            {item.label}
-          </button>
-        ))}
+        <h5 className="text-gray-950 font-medium leading-6">{user?.fullName || ""}</h5>
       </div>
-      <div
-        className="flex items-center gap-2 p-2 rounded-md cursor-pointer mt-5"
-        onClick={() => handleLogout()}
-      >
-        <span>Logout</span>
-      </div>
+
+      {SIDE_MENU_DATA.map((item, index) => (
+        <button
+          key={`menu_${index}`}
+          className={`w-full flex items-center gap-4 text-[15px] py-3 px-6 rounded-lg mb-3 ${
+            activeMenu === item.label ? "text-black bg-blue" : "text-gray-700"
+          }`}
+          onClick={() => handleClick(item.path)}
+        >
+          <item.icon className="text-xl" />
+          {item.label}
+        </button>
+      ))}
     </div>
   );
 };
+
 export default SideMenu;
