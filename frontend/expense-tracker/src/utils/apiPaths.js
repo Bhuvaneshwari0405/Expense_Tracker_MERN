@@ -1,6 +1,6 @@
 export const BASE_URL = "http://localhost:8000";
 
-export const API_PATHS= {
+export  const API_PATHS= {
     AUTH: {
 
     
@@ -28,3 +28,4 @@ export const API_PATHS= {
         UPLOAD: "/api/v1/auth/upload-image",
     },
 };
+export default API_PATHS;
