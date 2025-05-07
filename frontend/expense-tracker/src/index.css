@@ -13,7 +13,7 @@
   }
   body{
     background-color: aliceblue;
-    overflow: hidden;
+    overflow: auto;
   }
 }
 .input-box{
@@ -34,5 +34,5 @@
   @apply bg-white p-6 rounded-2xl shadow-md shadow-gray-100 border border-gray-200/50;
 }
 .card-btn{
-  @apply flex items-center gap-3 text-[12px] font-medium text-gray-700 hover:text-purple-500 bg-gray-50 hover:bg-purple-50 px-4 py-1.5 rounded-lg border borer-gray-200/50 cursor-pointer; 
+  @apply flex items-center gap-3 text-[12px] font-medium text-gray-700 hover:text-purple-500 bg-gray-50 hover:bg-purple-50 px-4 py-1.5 rounded-lg border border-gray-200/50 cursor-pointer; 
 }
